@@ -1,0 +1,7 @@
+# Where a Mainguard sealer may write acceptance tests, and how the daemon runs ONLY those tests.
+# Read from the default branch, never from an agent's branch. One line per test location:
+#   <directory> = <command>
+# {filter} becomes a `dotnet test --filter` naming the sealed tests; {tests} becomes the sealed
+# tests' full names, one argument each; {files} becomes the sealed test files; {location} is the
+# directory. Delete a line to keep sealers out of that location.
+test = node --test --test-reporter=tap {files}
