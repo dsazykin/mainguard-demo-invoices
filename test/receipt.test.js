@@ -16,20 +16,20 @@ test('renderReceipt starts with the customer and the item count', () => {
 })
 
 test('renderReceipt shows one line per cart line with its total', () => {
-  assert.deepEqual(renderReceipt(invoice()).slice(1, 3), ['2 x Green tea  €9.00', '3 x Cup  €18.00'])
+  assert.deepEqual(renderReceipt(invoice()).slice(1, 3), ['2 x Green tea  9.00 EUR', '3 x Cup  18.00 EUR'])
 })
 
 test('renderReceipt shows the discount when there is one', () => {
   const lines = renderReceipt(invoice({ code: 'FIVEOFF' }))
-  assert.deepEqual(lines.slice(-2), ['Discount FIVEOFF  -€5.00', 'Total  €22.00'])
+  assert.deepEqual(lines.slice(-2), ['Discount FIVEOFF  -5.00 EUR', 'Total  22.00 EUR'])
 })
 
 test('renderReceipt leaves the discount out when there is none', () => {
   const lines = renderReceipt(invoice())
   assert.equal(lines.length, 4)
-  assert.equal(lines.at(-1), 'Total  €27.00')
+  assert.equal(lines.at(-1), 'Total  27.00 EUR')
 })
 
 test("renderReceipt prints amounts in the invoice's currency", () => {
-  assert.equal(renderReceipt(invoice({ currency: 'USD' })).at(-1), 'Total  $27.00')
+  assert.equal(renderReceipt(invoice({ currency: 'USD' })).at(-1), 'Total  27.00 USD')
 })
