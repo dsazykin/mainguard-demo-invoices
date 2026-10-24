@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { addItem, createCart } from '../src/cart.js'
-import { createInvoice, invoiceTotal } from '../src/invoice.js'
+import { createInvoice, invoiceSummary, invoiceTotal } from '../src/invoice.js'
 
 const lamp = { sku: 'LAMP', name: 'Desk lamp', price: 18 }
 const bulb = { sku: 'BULB', name: 'Bulb', price: 2.25 }
@@ -46,4 +46,14 @@ test('createInvoice refuses a currency the library cannot show', () => {
 test('invoiceTotal is the subtotal less the discount', () => {
   assert.equal(invoiceTotal(createInvoice(cart(), { customer: 'Acme Ltd', code: 'WELCOME10' })), 24.3)
   assert.equal(invoiceTotal(createInvoice(cart(), { customer: 'Acme Ltd' })), 27)
+})
+
+test('invoiceSummary names the customer, counts every unit and shows the total as a price', () => {
+  const invoice = createInvoice(cart(), { customer: 'Acme Ltd', code: 'WELCOME10' })
+  assert.equal(invoiceSummary(invoice), 'Acme Ltd, 5 items, €24.30')
+})
+
+test('invoiceSummary uses the invoice currency and the singular for one item', () => {
+  const invoice = createInvoice(addItem(createCart(), lamp), { customer: 'Acme Ltd', currency: 'GBP' })
+  assert.equal(invoiceSummary(invoice), 'Acme Ltd, 1 item, £18.00')
 })
