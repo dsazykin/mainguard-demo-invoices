@@ -1,11 +1,7 @@
 // Amounts are plain numbers in the currency's major unit (12.5 is twelve euros fifty).
 // Every amount the library hands back has been through roundMoney.
 
-const SYMBOLS = {
-  EUR: '€',
-  GBP: '£',
-  USD: '$',
-}
+const CODES = ['EUR', 'GBP', 'USD']
 
 /** Rounds to whole cents, half away from zero. */
 export function roundMoney(amount) {
@@ -15,14 +11,13 @@ export function roundMoney(amount) {
 
 /** The currencies formatPrice knows. */
 export function currencies() {
-  return Object.keys(SYMBOLS)
+  return [...CODES]
 }
 
-/** An amount for people to read: "€12.50", "-£3.00". */
+/** An amount for people to read, followed by its currency code: "12.50 EUR", "-3.00 GBP". */
 export function formatPrice(amount, currency = 'EUR') {
-  const symbol = SYMBOLS[currency]
-  if (!symbol) throw new RangeError(`unknown currency: ${currency}`)
+  if (!CODES.includes(currency)) throw new RangeError(`unknown currency: ${currency}`)
   const rounded = roundMoney(amount)
   const sign = rounded < 0 ? '-' : ''
-  return `${sign}${symbol}${Math.abs(rounded).toFixed(2)}`
+  return `${sign}${Math.abs(rounded).toFixed(2)} ${currency}`
 }
