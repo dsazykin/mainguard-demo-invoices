@@ -42,5 +42,5 @@ test('an empty cart never gets a discount', () => {
 })
 
 test('describeDiscount names the minimum spend in the currency given', () => {
-  assert.equal(describeDiscount('FIVEOFF', 'GBP'), '£5.00 off orders of £25.00 or more')
+  assert.equal(describeDiscount('FIVEOFF', 'GBP'), '5.00 GBP off orders of 25.00 GBP or more')
 })
