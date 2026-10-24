@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { formatPrice, roundMoney } from '../src/money.js'
+import { currencyInfo, formatPrice, roundMoney } from '../src/money.js'
 
 test('roundMoney rounds to whole cents', () => {
   assert.equal(roundMoney(12.344), 12.34)
@@ -32,4 +32,15 @@ test('formatPrice puts the minus sign before the symbol', () => {
 
 test('formatPrice refuses a currency it does not know', () => {
   assert.throws(() => formatPrice(1, 'XYZ'), RangeError)
+})
+
+test("currencyInfo gives a currency's minor-unit digits", () => {
+  assert.equal(currencyInfo('EUR').digits, 2)
+  assert.equal(currencyInfo('JPY').digits, 0)
+  assert.equal(currencyInfo('BHD').digits, 3)
+})
+
+test('currencyInfo refuses a code that is not a currency', () => {
+  assert.throws(() => currencyInfo('XYZ'), RangeError)
+  assert.throws(() => currencyInfo('constructor'), RangeError)
 })

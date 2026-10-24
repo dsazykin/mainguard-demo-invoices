@@ -10,6 +10,6 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test --test-reporter=tap"
+    "test": "node --test --test-reporter=tap && node scripts/check-api.js"
   }
 }
