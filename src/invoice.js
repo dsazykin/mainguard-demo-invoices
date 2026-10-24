@@ -1,5 +1,5 @@
-import { cartSubtotal } from './cart.js'
-import { currencies, roundMoney } from './money.js'
+import { cartSubtotal, itemCount } from './cart.js'
+import { currencies, formatPrice, roundMoney } from './money.js'
 import { applyDiscount } from './discounts.js'
 
 /**
@@ -24,4 +24,11 @@ export function createInvoice(cart, { customer, code = null, currency = 'EUR' } 
 /** What the customer pays. */
 export function invoiceTotal(invoice) {
   return roundMoney(invoice.subtotal - invoice.discount)
+}
+
+/** One line for a list of invoices: "Invoice for Acme Ltd: 5 items, €24.30". */
+export function invoiceSummary(invoice) {
+  const count = itemCount(invoice)
+  const items = `${count} ${count === 1 ? 'item' : 'items'}`
+  return `Invoice for ${invoice.customer}: ${items}, ${formatPrice(invoiceTotal(invoice), invoice.currency)}`
 }
