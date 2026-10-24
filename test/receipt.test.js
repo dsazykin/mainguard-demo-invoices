@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { addItem, createCart } from '../src/cart.js'
 import { createInvoice } from '../src/invoice.js'
-import { renderReceipt } from '../src/receipt.js'
+import { invoiceSummary, renderReceipt } from '../src/receipt.js'
 
 const tea = { sku: 'TEA', name: 'Green tea', price: 4.5 }
 const cup = { sku: 'CUP', name: 'Cup', price: 6 }
@@ -32,4 +32,17 @@ test('renderReceipt leaves the discount out when there is none', () => {
 
 test("renderReceipt prints amounts in the invoice's currency", () => {
   assert.equal(renderReceipt(invoice({ currency: 'USD' })).at(-1), 'Total  $27.00')
+})
+
+test('invoiceSummary gives the customer, the item count and the total on one line', () => {
+  assert.equal(invoiceSummary(invoice()), 'Bea Jansen: 5 items, €27.00')
+})
+
+test('invoiceSummary uses the singular for a single item', () => {
+  const single = createInvoice(addItem(createCart(), cup), { customer: 'Bea Jansen' })
+  assert.equal(invoiceSummary(single), 'Bea Jansen: 1 item, €6.00')
+})
+
+test("invoiceSummary shows the discounted total in the invoice's currency", () => {
+  assert.equal(invoiceSummary(invoice({ code: 'FIVEOFF', currency: 'GBP' })), 'Bea Jansen: 5 items, £22.00')
 })

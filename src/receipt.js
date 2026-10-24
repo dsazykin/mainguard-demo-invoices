@@ -15,3 +15,10 @@ export function renderReceipt(invoice) {
   out.push(`Total  ${price(invoiceTotal(invoice))}`)
   return out
 }
+
+/** One line for an invoice: "Bea Jansen: 5 items, €27.00". */
+export function invoiceSummary(invoice) {
+  const count = itemCount(invoice)
+  const total = formatPrice(invoiceTotal(invoice), invoice.currency)
+  return `${invoice.customer}: ${count} ${count === 1 ? 'item' : 'items'}, ${total}`
+}
